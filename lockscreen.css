@@ -1,0 +1,57 @@
+/* lockscreen.css */
+
+.lock-screen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* Dark overlay */
+    backdrop-filter: blur(10px); /* Apply blur */
+    z-index: 3000; /* Ensure it's on top of everything */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.lock-screen-content {
+    text-align: center;
+}
+
+.lock-screen-time {
+    font-size: 5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.lock-screen-date {
+    font-size: 1.5rem;
+}
+
+.lock-screen-profile {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lock-screen-profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid white;
+    margin-bottom: 10px;
+}
+
+.lock-screen-username {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.lock-screen-unlock-hint {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: #ccc;
+}

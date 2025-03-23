@@ -1,0 +1,57 @@
+<file-path>
+
+/* music.css */
+
+.music-player {
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.album-art {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(45deg, #ff6b6b, #ff9f43);
+    border-radius: 10px;
+}
+
+.player-controls {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.player-controls button {
+    background: none;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.player-controls button:hover {
+    background: rgba(0,0,0,0.1);
+}
+
+.track-list {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+}
+
+.track {
+    padding: 8px 12px;
+    border-radius: 5px;
+    margin: 4px 0;
+    cursor: pointer;
+}
+
+.track.active {
+    background: rgba(0,0,0,0.05);
+    font-weight: 500;
+}
+

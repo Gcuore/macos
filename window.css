@@ -1,0 +1,126 @@
+/* window.css */
+
+.window {
+    position: absolute;
+    top: 200px;  
+    left: 200px;
+    width: 400px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.window.minimized {
+    display: none;
+}
+
+.window.maximized {
+    position: fixed;
+    top: 30px !important; /* Height of menu bar */
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 70px !important; /* Height of dock */
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 0 !important;
+    transform: none !important;
+}
+
+.window-header {
+    height: 22px;
+    background-color: #e9e9e9;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    position: relative;
+    cursor: grab;
+    -webkit-app-region: drag;
+}
+
+.window-header:active {
+    cursor: grabbing;
+}
+
+.window-buttons {
+    display: flex;
+    gap: 8px;
+    -webkit-app-region: no-drag;
+}
+
+.window-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.window-button.close {
+    background-color: #ff5f57;
+}
+
+.window-button.minimize {
+    background-color: #ffbd2e;
+}
+
+.window-button.maximize {
+    background-color: #28c940;
+}
+
+.window-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+}
+
+.window-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.web-app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.web-app-content {
+    flex: 1;
+    position: relative;
+}
+
+.web-app-content iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+@keyframes genie-effect {
+    0% {
+        transform: scale(1) translate(0, 0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.1) translate(var(--target-x), var(--target-y));
+        opacity: 0;
+    }
+}
+
+.window-clone {
+    position: fixed;
+    pointer-events: none;
+    animation: genie-effect 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}

@@ -1,0 +1,193 @@
+/* Control Center styles - control-center.css */
+
+.control-center-panel {
+    position: fixed;
+    top: 35px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(25px);
+    border-radius: 12px;
+    padding: 15px;
+    width: 340px;
+    display: none;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    z-index: 2100;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: fadeIn 0.2s ease forwards;
+}
+
+.control-center-panel.show {
+    display: block;
+}
+
+.control-section {
+    display: grid;
+    gap: 8px;
+}
+
+.control-group {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.control-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.control-button {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 70px;
+    justify-content: center;
+    position: relative;
+}
+
+.control-button.span-2 {
+    grid-column: span 2;
+}
+
+.control-button:hover {
+    background: rgba(255, 255, 255, 1);
+}
+
+.control-button.active {
+    background: #0066ff;
+    color: white;
+}
+
+.control-button.active svg {
+    fill: white;
+}
+
+.control-button svg {
+    width: 20px;
+    height: 20px;
+    fill: #666;
+}
+
+.control-button span {
+    font-size: 11px;
+    color: #333;
+    font-weight: 500;
+}
+
+.control-button.active span {
+    color: white;
+}
+
+.control-slider {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.control-slider svg {
+    width: 18px;
+    height: 18px;
+    fill: #666;
+}
+
+.control-slider input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+}
+
+.control-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.media-controls {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.media-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.media-art {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(45deg, #ff6b6b, #ff9f43);
+    border-radius: 6px;
+}
+
+.media-text {
+    flex: 1;
+}
+
+.media-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+}
+
+.media-artist {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.media-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 4px;
+}
+
+.media-button {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.media-button:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.media-button svg {
+    width: 20px;
+    height: 20px;
+    fill: #666;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

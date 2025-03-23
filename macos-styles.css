@@ -1,0 +1,135 @@
+/* New file for macOS-specific styles */
+
+/* Window styles */
+.window {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+}
+
+.window-header {
+  background: #f0f0f0;
+  border-radius: 10px 10px 0 0;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  position: relative;
+}
+
+.window-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.window-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.window-button.close {
+  background: #ff5f57;
+}
+
+.window-button.minimize {
+  background: #febc2e;
+}
+
+.window-button.maximize {
+  background: #28c940;
+}
+
+/* macOS-style toolbar */
+.toolbar {
+  height: 50px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+}
+
+.toolbar-button {
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.toolbar-button:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+.toolbar-button svg {
+  width: 16px;
+  height: 16px;
+  fill: #666;
+}
+
+/* macOS-style sidebar */
+.sidebar {
+  width: 200px;
+  background: #f5f5f5;
+  border-right: 1px solid #e0e0e0;
+  padding: 12px 0;
+}
+
+.sidebar-item {
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #333;
+  font-size: 13px;
+}
+
+.sidebar-item:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+.sidebar-item.active {
+  background: rgba(0,122,255,0.1);
+  color: #0066cc;
+}
+
+.sidebar-item svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* macOS-style search field */
+.search-field {
+  background: #e8e8e8;
+  border-radius: 5px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-field input {
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 13px;
+  width: 100%;
+}
+
+.search-field svg {
+  width: 14px;
+  height: 14px;
+  fill: #666;
+}

@@ -1,0 +1,153 @@
+<file-path>
+
+/* messages.css */
+
+.messages-app {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    height: 100%;
+    background: white;
+}
+
+.messages-sidebar {
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+}
+
+.messages-search {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.messages-search input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    outline: none;
+}
+
+.conversations-list {
+    overflow-y: auto;
+}
+
+.conversation {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.conversation:hover {
+    background: #f9f9f9;
+}
+
+.conversation.active {
+    background: #e8f1fb;
+}
+
+.conversation img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.conversation-name {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.conversation-last {
+    font-size: 12px;
+    color: #666;
+}
+
+.messages-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.messages-header {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.messages-header img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.messages-chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.message {
+    max-width: 70%;
+    padding: 8px 12px;
+    border-radius: 16px;
+    font-size: 14px;
+}
+
+.message.received {
+    align-self: flex-start;
+    background: #f0f0f0;
+}
+
+.message.sent {
+    align-self: flex-end;
+    background: #0066cc;
+    color: white;
+}
+
+.message-time {
+    font-size: 11px;
+    margin-top: 4px;
+    opacity: 0.7;
+}
+
+.messages-input {
+    padding: 12px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 8px;
+}
+
+.messages-input input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    outline: none;
+}
+
+.send-button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: #0066cc;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.send-button svg {
+    width: 18px;
+    height: 18px;
+    fill: white;
+}
+
