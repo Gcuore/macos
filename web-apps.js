@@ -1,4 +1,5 @@
-// Update web-apps.js to handle full window coverage
+// web-apps.js
+
 export const WebApps = {
     initializeWebApp(appName, windowId) {
         const appConfigs = {
@@ -32,14 +33,12 @@ export const WebApps = {
         if (!config) return null;
 
         return `
-            <div class="web-app ${appName.toLowerCase()}-app" style="height: 100%; display: flex; flex-direction: column;">
-                <div class="web-app-content" style="flex: 1; position: relative;">
+            <div class="web-app">
+                <div class="web-app-content">
                     <iframe 
                         src="${config.url}"
                         sandbox="${config.sandbox}"
-                        allow="geolocation; microphone; camera; midi; encrypted-media"
-                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
-                        frameborder="0">
+                        allow="geolocation; microphone; camera; midi; encrypted-media">
                     </iframe>
                 </div>
             </div>

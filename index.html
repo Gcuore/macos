@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="music.css">
     <link rel="stylesheet" href="maps.css">
     <link rel="stylesheet" href="lockscreen.css">
+    <link rel="stylesheet" href="file-styles.css">
+    <link rel="stylesheet" href="macos-app-styles.css">
 </head>
 <body>
     <div class="desktop">
@@ -121,6 +123,7 @@
                 <div class="menu-icon control-center">
                     <img src="https://storage.googleapis.com/multi-static-content/previews/artage-io-thumb-93c2343c6beeec1560d3b111efc7df2c.png" width="18" height="18" alt="Control Center">
                 </div>
+                <div class="menu-icon stage-toggle-label"></div>
                 <div class="datetime">
                     <span id="time">12:00 PM</span>
                     <span id="date">Mon Jun 10</span>
@@ -132,7 +135,9 @@
                 </div>
             </div>
         </div>
-        <div class="desktop-icons"></div>
+        <div class="desktop-icons">
+            <div id="unlock-popup-container"></div>
+        </div>
     </div>
 
     <div class="launchpad-overlay">
@@ -262,7 +267,7 @@
                     </div>
                     <div class="sidebar-item">
                         <svg viewBox="0 0 24 24" width="16" height="16">
-                            <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                            <path d="M19,21H8V5A3,3 0 0,0 5,2H2V21H19M19,5H17V3A2,2 0 0,0 15,1H2A2,2 0 0,0 0,3V21A2,2 0 0,0 2,23H19A2,2 0 0,0 21,21H19M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
                         </svg>
                         <span>Documents</span>
                     </div>
@@ -299,9 +304,16 @@
             }
         }
     </script>
+    <script type="module">
+        // Force absolute base URL for imports
+        const baseUrl = window.location.pathname.includes('/macos-web') ? '/macos-web' : '';
+        document.querySelector('.desktop').style.backgroundImage = `url('${baseUrl}/SequoiaDark.png')`;
+    </script>
     <script type="module" src="config.js"></script>
     <script type="module" src="script.js"></script>
     <script type="module" src="finder.js"></script>
     <script type="module" src="lockscreen.js"></script>
+    <script type="module" src="stage-manager.js"></script>
+    <script type="module" src="unlock-popup.js"></script>
 </body>
 </html>

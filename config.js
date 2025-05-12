@@ -5,18 +5,22 @@ export const config = {
     dockSize: 48, 
     dockMaxZoom: 1.4,          // Slightly reduced max zoom
 
+    // Root URL for GitHub Pages compatibility
+    baseUrl: window.location.pathname.includes('/macos-web') ? '/macos-web' : '',
+    
     // Icons for the dock
     dockIcons: [
         { name: "Finder", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/9e80c50a5802d3b0a7ec66f3fe4ce348_low_res_Finder.png", action: "toggleFinderWindow" },
         { name: "Launchpad", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/bb6cdfc3456ac1ec1ccf938473dd52aa_low_res_Launchpad.png", action: "toggleLaunchpad" },
         { name: "Safari", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/8204ffaf2c6f9f46a1a803a96c91e7d5_low_res_Safari.png", action: "openBrowser" },
         { name: "Messages", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/bb5a4b5042f5dbd01baf9c1697460774_JQL8D8bMM2.png", action: "openMessages" },
-        { name: "Mail", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/7da21170e261fc2050fc689c1a437efc_low_res_Mail.png", action: "openMail" },
-        { name: "Maps", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/6d26d432bd65c522b0708185c0768ec3_low_res_Maps.png", action: "openMaps" },
         { name: "Photos", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/c0b761fc19488f0b4d2311f29b71ba01_low_res_Photos.png", action: "openPhotos" },
         { name: "Music", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/98838a6b1fcba311aa2826f8cb46d7c9_low_res_Music.png", action: "openMusic" },
-        { name: "App Store", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/1fa0bd405a6babc0401d7d167c85a334_low_res_App_Store.png", action: "openAppStore" },
-        { name: "System Preferences", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/9b23bcaafd4c81fa40685736c9d2cac1_2DLff7nlvI.png", action: "openSettings" }
+        { name: "Settings", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/9b23bcaafd4c81fa40685736c9d2cac1_2DLff7nlvI.png", action: "openSettings" },
+        { name: "Instagram", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/94426dd1ffb079f8b74caad9225be819_low_res_Instagram.png", action: "openInstagram" },
+        { name: "Spotify",  iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/992a189bc515c265833d1f0c6556c12c_low_res_Spotify.png", action: "openSpotify" },
+        { name: "VSCode",   iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/eb454471770de82ad9e80c8007bb54f6_low_res_VSCode.png", action: "openVSCode" },
+        { name: "YouTube",  iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/5207abd97262cc86e31c13fa9f13b774_low_res_YouTube.png", action: "openYoutube" }
     ],
     
     // Icons for the desktop
@@ -28,12 +32,13 @@ export const config = {
         { name: "Launchpad", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/bb6cdfc3456ac1ec1ccf938473dd52aa_low_res_Launchpad.png", action: "toggleLaunchpad" },
         { name: "Safari", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/8204ffaf2c6f9f46a1a803a96c91e7d5_low_res_Safari.png", action: "openBrowser" },
         { name: "Messages", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/bb5a4b5042f5dbd01baf9c1697460774_JQL8D8bMM2.png", action: "openMessages" },
-        { name: "Mail", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/7da21170e261fc2050fc689c1a437efc_low_res_Mail.png", action: "openMail" },
-        { name: "Maps", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/6d26d432bd65c522b0708185c0768ec3_low_res_Maps.png", action: "openMaps" },
         { name: "Photos", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/c0b761fc19488f0b4d2311f29b71ba01_low_res_Photos.png", action: "openPhotos" },
         { name: "Music", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/98838a6b1fcba311aa2826f8cb46d7c9_low_res_Music.png", action: "openMusic" },
-        { name: "App Store", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/1fa0bd405a6babc0401d7d167c85a334_low_res_App_Store.png", action: "openAppStore" },
-        { name: "System Preferences", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/9b23bcaafd4c81fa40685736c9d2cac1_2DLff7nlvI.png", action: "openSettings" }
+        { name: "Settings", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/9b23bcaafd4c81fa40685736c9d2cac1_2DLff7nlvI.png", action: "openSettings" },
+        { name: "Instagram", iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/94426dd1ffb079f8b74caad9225be819_low_res_Instagram.png", action: "openInstagram" },
+        { name: "Spotify",  iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/992a189bc515c265833d1f0c6556c12c_low_res_Spotify.png", action: "openSpotify" },
+        { name: "VSCode",   iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/eb454471770de82ad9e80c8007bb54f6_low_res_VSCode.png", action: "openVSCode" },
+        { name: "YouTube",  iconUrl: "https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/5207abd97262cc86e31c13fa9f13b774_low_res_YouTube.png", action: "openYoutube" }
     ],
     
     // Files for the Finder window

@@ -23,9 +23,7 @@ export async function initSafari(windowId) {
                 </div>
             </div>
             <div class="tab-bar"></div>
-            <div class="browser-viewport">
-                <iframe src="about:blank" frameborder="0" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads"></iframe>
-            </div>
+            <div class="browser-viewport"></div>
         </div>
     `;
 
@@ -36,52 +34,47 @@ export async function initSafari(windowId) {
     return content;
 }
 
-function loadExternalUrl(url, iframe) {
-    // Define web app URLs
-    const webApps = {
-        'music': 'https://gcuore.github.io/simplemusic',
-        'maps': 'https://maps.google.com',
-        'mail': 'https://mail.google.com', 
-        'messages': 'https://web.whatsapp.com',
-        'photos': 'https://photos.google.com',
-        'appstore': 'https://apps.apple.com/it/story/id1457219438'
-    };
-
-    // Check if this is a web app URL
-    const appUrl = webApps[url.toLowerCase()];
-    const finalUrl = appUrl || url;
-
-    // Add necessary protocols if missing
-    if (!finalUrl.startsWith('http')) {
-        finalUrl = 'https://' + finalUrl;
-    }
-
-    if (iframe) {
-        // Update iframe sandbox attributes for web apps
-        iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms allow-downloads allow-modals allow-presentation allow-orientation-lock');
-        iframe.src = finalUrl;
-    }
-}
-
 function initBrowserFunctionality(windowId) {
     const browser = document.querySelector(`#${windowId} .safari-browser`);
     const urlInput = browser.querySelector('.url-bar input');
-    const iframe = browser.querySelector('iframe');
     const tabBar = browser.querySelector('.tab-bar');
+    const viewport = browser.querySelector('.browser-viewport');
     const backBtn = browser.querySelector('.nav-button.back');
     const forwardBtn = browser.querySelector('.nav-button.forward');
     const reloadBtn = browser.querySelector('.nav-button.reload');
     const newTabBtn = browser.querySelector('.new-tab-button');
 
-    let tabs = [{ id: Date.now(), title: 'New Tab', url: 'about:blank', favicon: 'https://www.google.com/favicon.ico' }];
-    let activeTabId = tabs[0].id;
+    let tabs = [];
+    let activeTabId = null;
+
+    function createTab() {
+        const tabId = Date.now();
+        const tab = {
+            id: tabId,
+            title: 'New Tab',
+            url: 'about:blank',
+            favicon: 'https://www.google.com/favicon.ico',
+            iframe: document.createElement('iframe')
+        };
+        
+        tab.iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms allow-downloads');
+        tab.iframe.style.width = '100%';
+        tab.iframe.style.height = '100%';
+        tab.iframe.style.border = 'none';
+        tab.iframe.style.display = 'none';
+        
+        viewport.appendChild(tab.iframe);
+        
+        tabs.push(tab);
+        return tab;
+    }
 
     function createTabElement(tab) {
         const tabElement = document.createElement('div');
         tabElement.className = `browser-tab ${tab.id === activeTabId ? 'active' : ''}`;
         tabElement.dataset.tabId = tab.id;
         tabElement.innerHTML = `
-            <img src="${tab.favicon}" class="tab-favicon">
+            <img src="${tab.favicon}" class="tab-favicon" alt="favicon">
             <div class="tab-title">${tab.title}</div>
             <button class="close-tab">×</button>
         `;
@@ -93,39 +86,66 @@ function initBrowserFunctionality(windowId) {
         tabs.forEach(tab => {
             tabBar.appendChild(createTabElement(tab));
         });
+        
+        // Show active tab's iframe, hide others
+        tabs.forEach(tab => {
+            tab.iframe.style.display = tab.id === activeTabId ? 'block' : 'none';
+        });
     }
 
-    function loadUrl(url) {
+    function setActiveTab(tabId) {
+        activeTabId = tabId;
+        const activeTab = tabs.find(t => t.id === tabId);
+        if (activeTab) {
+            urlInput.value = activeTab.url !== 'about:blank' ? activeTab.url : '';
+            updateTabs();
+        }
+    }
+
+    function loadUrl(url, tabId) {
+        const tab = tabs.find(t => t.id === tabId);
+        if (!tab) return;
+
         if (!url.match(/^https?:\/\//)) {
             url = `https://${url}`;
         }
-        
-        const activeTab = tabs.find(t => t.id === activeTabId);
-        if (activeTab) {
-            activeTab.url = url;
-            loadExternalUrl(url, iframe);
-            urlInput.value = url;
-        }
+
+        tab.url = url;
+        tab.iframe.src = url;
+        urlInput.value = url;
+
+        // Setup iframe load event listener
+        tab.iframe.onload = () => {
+            try {
+                tab.title = tab.iframe.contentDocument?.title || url;
+                // Try to get favicon from the loaded page
+                const favicon = tab.iframe.contentDocument?.querySelector('link[rel*="icon"]')?.href;
+                if (favicon) {
+                    tab.favicon = favicon;
+                }
+            } catch (e) {
+                tab.title = new URL(url).hostname;
+            }
+            updateTabs();
+        };
     }
 
+    // Create initial tab
+    const initialTab = createTab();
+    setActiveTab(initialTab.id);
+    updateTabs();
+
+    // Event Listeners
     urlInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            loadUrl(urlInput.value);
+        if (e.key === 'Enter' && urlInput.value.trim()) {
+            loadUrl(urlInput.value.trim(), activeTabId);
         }
     });
 
     newTabBtn.addEventListener('click', () => {
-        const newTab = {
-            id: Date.now(),
-            title: 'New Tab',
-            url: 'about:blank',
-            favicon: 'https://www.google.com/favicon.ico'
-        };
-        tabs.push(newTab);
-        activeTabId = newTab.id;
+        const newTab = createTab();
+        setActiveTab(newTab.id);
         updateTabs();
-        urlInput.value = '';
-        iframe.src = 'about:blank';
     });
 
     tabBar.addEventListener('click', (e) => {
@@ -136,38 +156,28 @@ function initBrowserFunctionality(windowId) {
         
         if (e.target.classList.contains('close-tab')) {
             if (tabs.length > 1) {
+                // Remove tab and its iframe
+                const tabIndex = tabs.findIndex(t => t.id === tabId);
+                const tab = tabs[tabIndex];
+                tab.iframe.remove();
                 tabs = tabs.filter(t => t.id !== tabId);
+                
+                // If closing active tab, activate the next or previous tab
                 if (activeTabId === tabId) {
-                    activeTabId = tabs[0].id;
-                    const activeTab = tabs.find(t => t.id === activeTabId);
-                    urlInput.value = activeTab.url;
-                    iframe.src = activeTab.url;
+                    const newActiveTab = tabs[tabIndex] || tabs[tabIndex - 1];
+                    setActiveTab(newActiveTab.id);
                 }
                 updateTabs();
             }
         } else {
-            activeTabId = tabId;
-            const activeTab = tabs.find(t => t.id === activeTabId);
-            urlInput.value = activeTab.url;
-            iframe.src = activeTab.url;
-            updateTabs();
+            setActiveTab(tabId);
         }
     });
 
     reloadBtn.addEventListener('click', () => {
-        iframe.src = iframe.src;
-    });
-
-    // Handle iframe navigation events
-    iframe.addEventListener('load', () => {
         const activeTab = tabs.find(t => t.id === activeTabId);
-        if (activeTab) {
-            activeTab.url = iframe.src;
-            activeTab.title = iframe.contentDocument?.title || 'New Tab';
-            urlInput.value = iframe.src;
-            updateTabs();
+        if (activeTab && activeTab.url !== 'about:blank') {
+            loadUrl(activeTab.url, activeTabId);
         }
     });
-
-    updateTabs();
 }

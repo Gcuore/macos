@@ -254,11 +254,13 @@ body {
 
 /* Desktop Icons */
 .desktop-icons {
+    position: relative; 
     padding: 40px 20px;
     display: grid;
     grid-template-columns: repeat(auto-fill, 80px);
     grid-auto-rows: 90px;
     gap: 10px;
+    z-index: 1; 
 }
 
 .desktop-icon {
@@ -290,6 +292,10 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.unlock-popup {
+    display: none; /* Hide old popup styles */
 }
 
 .window {
@@ -544,4 +550,376 @@ body {
     width: 100%;
     height: 100%;
     border: none;
+}
+
+.settings-app {
+    display: flex;
+    height: 100%;
+    background: white;
+}
+
+.settings-sidebar {
+    width: 250px;
+    border-right: 1px solid #e0e0e0;
+    background: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-search {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.settings-search input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.settings-nav {
+    padding: 12px 0;
+}
+
+.settings-nav .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    cursor: pointer;
+    color: #333;
+    font-size: 14px;
+}
+
+.settings-nav .nav-item:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+.settings-nav .nav-item.active {
+    background: rgba(0,122,255,0.1);
+    color: #0066cc;
+}
+
+.settings-nav .nav-item svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+.settings-content {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.settings-section {
+    display: none;
+}
+
+.settings-section.active {
+    display: block;
+}
+
+.settings-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.settings-group {
+    background: #f8f8f8;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.settings-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.settings-option:last-child {
+    border-bottom: none;
+}
+
+.settings-option label {
+    font-size: 14px;
+    color: #333;
+}
+
+.settings-option select,
+.settings-option input[type="text"] {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 13px;
+    min-width: 150px;
+}
+
+.settings-option input[type="range"] {
+    width: 150px;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.toggle-switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + .slider {
+    background-color: #0066cc;
+}
+
+.toggle-switch input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.settings-option input[type="color"] {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.stage-manager {
+    position: fixed;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 2050;
+}
+
+.stage-preview {
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    position: relative;
+    opacity: 0.8;
+    transform-origin: left center;
+}
+
+.stage-preview:hover {
+    transform: scale(1.05);
+    opacity: 1;
+}
+
+.stage-preview.active {
+    border: 2px solid #0066cc;
+    opacity: 1;
+}
+
+.stage-preview .preview-content {
+    width: 100%;
+    height: 100%;
+    background: #f8f8f8;
+    position: relative;
+    overflow: hidden;
+}
+
+.stage-preview .preview-content > * {
+    transform: scale(0.25);
+    transform-origin: top left;
+    pointer-events: none;
+    width: 400%;
+    height: 400%;
+}
+
+.stage-preview .window-header,
+.stage-preview .window-buttons,
+.stage-preview .resize-handle {
+    display: none !important;
+}
+
+.stage-preview .preview-app-icon {
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.9);
+    padding: 2px;
+    z-index: 10;
+    object-fit: contain;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.stage-manager-toggle {
+    position: fixed;
+    bottom: 100px;
+    left: 20px;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2050;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.stage-manager-toggle svg {
+    width: 18px;
+    height: 18px;
+    fill: #333;
+}
+
+.menu-icon.stage-toggle-label {
+    background-image: url('/stage%20manager.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 30px;
+    height: 30px;
+    color: transparent;
+    font-size: 0;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-icon.stage-toggle-label:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.notification-center {
+    position: fixed;
+    top: 40px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 3500;
+    pointer-events: none;
+}
+
+.macos-notification {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    border-radius: 12px;
+    padding: 12px;
+    width: 320px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transform: translateX(120%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: auto;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.macos-notification.show {
+    transform: translateX(0);
+}
+
+.notification-header {
+    position: relative;
+    padding-right: 32px;
+}
+
+.notification-close {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: #666;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.notification-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.notification-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.notification-tag {
+    font-size: 11px;
+    color: #666;
+    font-weight: 500;
+}
+
+.notification-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+}
+
+.notification-content {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.4;
+}
+
+.notification-actions {
+    margin-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.notification-action {
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    color: #007AFF;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.notification-action:hover {
+    background: rgba(0, 122, 255, 0.1);
 }

@@ -1,14 +1,13 @@
 // lockscreen.js
-
 let isLocked = true;
+
+import { NotificationSystem } from './notifications.js';
 
 export function initLockScreen() {
     const lockScreenOverlay = document.querySelector('.lock-screen-overlay');
-    lockScreenOverlay.style.display = 'flex'; // Ensure lockscreen is visible on launch
+    lockScreenOverlay.style.display = 'flex';
 
-    // When clicking on the overlay (outside the central content) unlock the screen
     lockScreenOverlay.addEventListener('click', unlockScreen);
-    // Prevent clicks inside the lockscreen content from triggering an unlock
     const content = lockScreenOverlay.querySelector('.lock-screen-content');
     if (content) {
         content.addEventListener('click', (e) => {
@@ -17,23 +16,26 @@ export function initLockScreen() {
     }
 
     updateLockScreenTime();
-    setInterval(updateLockScreenTime, 1000); // Update time every second
+    setInterval(updateLockScreenTime, 1000);
 }
 
 export function toggleLockScreen() {
     isLocked = !isLocked;
     const lockScreenOverlay = document.querySelector('.lock-screen-overlay');
     lockScreenOverlay.style.display = isLocked ? 'flex' : 'none';
-    if (isLocked) {
-        // Optionally pause other interactions when locked if needed in future
-    } else {
-        // Optionally resume interactions
-    }
 }
 
 function unlockScreen() {
     if (isLocked) {
-        toggleLockScreen(); // Simple unlock for now
+        toggleLockScreen();
+        
+        // Only show notification if not previously dismissed
+        if (!localStorage.getItem('hideUnlockPopup')) {
+            setTimeout(() => {
+                const notificationSystem = new window.NotificationSystem();
+                notificationSystem.showUnlockMessage();
+            }, 500);
+        }
     }
 }
 
@@ -46,7 +48,7 @@ function updateLockScreenTime() {
         let hours = now.getHours();
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12 || 12; // Convert to 12-hour format
+        hours = hours % 12 || 12;
 
         const time = `${hours}:${minutes} ${ampm}`;
 

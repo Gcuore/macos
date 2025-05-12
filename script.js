@@ -1,6 +1,6 @@
 import { config } from './config.js';
-import { initLaunchpad, toggleLaunchpad } from './launchpad.js'; // Import launchpad functions
-import { initFinderWindow, initWindowDragging } from './finder.js'; // Import Finder functions and initWindowDragging
+import { initLaunchpad, toggleLaunchpad } from './launchpad.js'; 
+import { initFinderWindow, initWindowDragging } from './finder.js'; 
 import { initDock } from './dock.js';
 import { initMail } from './mail.js';
 import { initMaps } from './maps.js';
@@ -10,18 +10,23 @@ import { initAppStore } from './appstore.js';
 import { initSettings } from './settings.js';
 import { initMessages } from './messages.js';
 import { initSafari } from './safari.js';
-import { initLockScreen, toggleLockScreen } from './lockscreen.js'; // Import lockscreen functions
-import { initWindowManager } from './window-manager.js';
+import { initLockScreen, toggleLockScreen } from './lockscreen.js'; 
+import { initWindowManager, restoreWindow } from './window-manager.js'; 
 import { createAppWindow } from './window-creator.js';
+import { initStageManager } from './stage-manager.js';
+import { initUnlockPopup } from './unlock-popup.js';
+// Import the new context menu system
+import { ContextMenuSystem } from './context-menu.js';
+import { NotificationSystem } from './notifications.js';
 
 function initMenuBar() {
     try {
         const timeSpan = document.getElementById('time');
         const dateSpan = document.getElementById('date');
         const menuItems = document.querySelectorAll('.menu-item');
-        const lockScreenToggle = document.querySelector('.lock-screen-toggle'); // Lock screen toggle icon
+        const lockScreenToggle = document.querySelector('.lock-screen-toggle'); 
 
-        lockScreenToggle.addEventListener('click', (e) => { // Add event listener for lock screen toggle
+        lockScreenToggle.addEventListener('click', (e) => { 
             e.stopPropagation();
             toggleLockScreen();
         });
@@ -29,7 +34,6 @@ function initMenuBar() {
         menuItems.forEach(menuItem => {
             const dropdownMenu = menuItem.querySelector('.dropdown-menu');
             if (dropdownMenu) {
-                // Position dropdown menu relative to menu item
                 menuItem.addEventListener('mouseenter', () => {
                     const menuRect = menuItem.getBoundingClientRect();
                     dropdownMenu.style.left = '0';
@@ -44,7 +48,6 @@ function initMenuBar() {
                     dropdownMenu.style.visibility = 'hidden';
                 });
 
-                // Handle click events on dropdown items
                 dropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
                     item.addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -54,7 +57,6 @@ function initMenuBar() {
             }
         });
 
-        // Only close dropdowns when clicking outside menu bar area
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.menu-bar')) {
                 menuItems.forEach(menuItem => {
@@ -96,7 +98,6 @@ function initMenuBar() {
         const appleMenu = document.querySelector('.apple-menu');
         const dropdownMenu = appleMenu.querySelector('.dropdown-menu');
 
-        // Show menu on hover
         appleMenu.addEventListener('mouseenter', () => {
             dropdownMenu.style.opacity = '1';
             dropdownMenu.style.visibility = 'visible';
@@ -107,7 +108,6 @@ function initMenuBar() {
             dropdownMenu.style.visibility = 'hidden';
         });
 
-        // Handle menu items
         dropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -121,7 +121,6 @@ function initMenuBar() {
                         document.body.style.filter = 'brightness(0%)';
                         break;
                     case 'Force Quit...':
-                        // You could show a force quit dialog here
                         break;
                     case 'Log Out...':
                         if(confirm('Are you sure you want to log out?')) {
@@ -181,17 +180,22 @@ window.handleAppAction = async function(action, appName) {
         const windows = document.querySelectorAll('.window');
         let highestZ = Math.max(...Array.from(windows).map(w => parseInt(w.style.zIndex || 1000)));
 
+        const minimizedWindow = document.querySelector(`.window[data-app="${appName}"].minimized`);
+        if (minimizedWindow) {
+            restoreWindow(minimizedWindow);
+            minimizedWindow.style.zIndex = highestZ + 1;
+            return;
+        }
+
         switch (action) {
             case 'toggleFinderWindow':
                 const finderWindow = document.querySelector('.finder-window');
                 finderWindow.style.display = finderWindow.style.display === 'none' ? 'block' : 'none';
                 finderWindow.style.zIndex = highestZ + 1;
                 break;
-
             case 'toggleLaunchpad':
                 toggleLaunchpad();
                 break;
-
             case 'openBrowser':
                 await createAppWindow('Browser', action);
                 break;
@@ -210,15 +214,23 @@ window.handleAppAction = async function(action, appName) {
             case 'openMusic':
                 await createAppWindow('Music', action);
                 break;
-            case 'openAppStore':
-                await createAppWindow('AppStore', action);
+            case 'openInstagram':
+                await createAppWindow('Instagram', action);
+                break;
+            case 'openSpotify':
+                await createAppWindow('Spotify', action);
+                break;
+            case 'openVSCode':
+                await createAppWindow('VSCode', action);
+                break;
+            case 'openYoutube':
+                await createAppWindow('YouTube', action);
                 break;
             case 'openSettings':
                 await createAppWindow('Settings', action);
                 break;
         }
 
-        // Update dock icon state
         const dockIcon = document.querySelector(`.dock-icon[data-name="${appName}"]`);
         if (dockIcon) {
             dockIcon.querySelector('.dock-icon-dot').style.opacity = '1';
@@ -280,7 +292,6 @@ function setupWindowControls(windowId, appName) {
 
         maximizeButton.addEventListener('click', () => {
             if (!windowElem.classList.contains('maximized')) {
-                // Store current window position and size before maximizing
                 windowElem.dataset.originalStyles = JSON.stringify({
                     width: windowElem.style.width,
                     height: windowElem.style.height,
@@ -291,13 +302,11 @@ function setupWindowControls(windowId, appName) {
                 
                 windowElem.classList.add('maximized');
             } else {
-                // Restore original window position and size
                 const originalStyles = JSON.parse(windowElem.dataset.originalStyles);
                 windowElem.classList.remove('maximized');
                 Object.assign(windowElem.style, originalStyles);
             }
 
-            // Ensure window is at the front
             const windows = document.querySelectorAll('.window');
             const highestZ = Math.max(...Array.from(windows).map(w => parseInt(w.style.zIndex || 1000)));
             windowElem.style.zIndex = highestZ + 1;
@@ -377,11 +386,129 @@ function initControlCenter() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Fix background image for GitHub Pages
+    const baseUrl = window.location.pathname.includes('/macos-web') ? '/macos-web' : '';
+    document.querySelector('.desktop').style.backgroundImage = `url('${baseUrl}/SequoiaDark.png')`;
+    
     initMenuBar();
     initDock();
     initDesktopIcons();
     initFinderWindow();
     initLaunchpad();
     initControlCenter();
-    initLockScreen(); 
+    initLockScreen();
+    initStageManager();
+
+    const stageToggle = document.querySelector('.menu-icon.stage-toggle-label');
+    if (stageToggle) {
+        stageToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            import('./stage-manager.js').then(mod => mod.toggleStageManager());
+        });
+    }
+
+    initUnlockPopup();
+    
+    window.contextMenuSystem = new ContextMenuSystem();
+    
+    window.NotificationSystem = NotificationSystem;
+    
+    document.querySelector('.desktop').addEventListener('contextmenu', (e) => {
+        if (e.target.closest('.desktop-icon') || e.target.closest('.window') || 
+            e.target.closest('.dock') || e.target.closest('.menu-bar')) {
+            return; 
+        }
+        
+        e.preventDefault();
+        window.contextMenuSystem.showContextMenu(e.clientX, e.clientY, [
+            {
+                label: 'New Folder',
+                icon: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" /></svg>',
+                action: () => {
+                    const desktopIcons = document.querySelector('.desktop-icons');
+                    const newFolder = document.createElement('div');
+                    newFolder.className = 'desktop-icon';
+                    newFolder.innerHTML = `
+                        <img src="https://parsefiles.back4app.com/JPaQcFfEEQ1ePBxbf6wvzkPMEqKYHhPYv8boI1Rc/e2f0bf04b50bb5e964833fa735992c97_folder.png" alt="New Folder">
+                        <div class="desktop-icon-name" contenteditable="true">New Folder</div>
+                    `;
+                    desktopIcons.appendChild(newFolder);
+                    
+                    setTimeout(() => {
+                        const nameElement = newFolder.querySelector('.desktop-icon-name');
+                        nameElement.focus();
+                        const range = document.createRange();
+                        range.selectNodeContents(nameElement);
+                        const selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                        
+                        nameElement.addEventListener('blur', () => {
+                            nameElement.contentEditable = false;
+                        });
+                    }, 100);
+                }
+            },
+            {
+                label: 'Change Desktop Background',
+                icon: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z" /></svg>',
+                action: () => {
+                    const desktop = document.querySelector('.desktop');
+                    const backgrounds = [
+                        '/SequoiaDark.png',
+                        'https://wallpaperaccess.com/full/1638001.jpg',
+                        'https://wallpaperaccess.com/full/3277616.jpg',
+                        'https://wallpaperaccess.com/full/5736319.jpg'
+                    ];
+                    
+                    const currentBg = desktop.style.backgroundImage;
+                    const currentIndex = backgrounds.findIndex(bg => currentBg.includes(bg.replace(/\//g, '\\/')));
+                    const nextIndex = (currentIndex + 1) % backgrounds.length;
+                    
+                    desktop.style.transition = 'background-image 1s ease';
+                    desktop.style.backgroundImage = `url(${backgrounds[nextIndex]})`;
+                }
+            }
+        ]);
+    });
+
+    document.querySelectorAll('.dock-icon').forEach(icon => {
+        icon.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            const appName = icon.getAttribute('data-name');
+            const action = window.config.dockIcons.find(dockIcon => dockIcon.name === appName)?.action;
+            
+            window.contextMenuSystem.showContextMenu(e.clientX, e.clientY, [
+                {
+                    label: 'Open',
+                    icon: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M19,20H4C2.89,20 2,19.1 2,18V6C2,4.89 2.89,4 4,4H10L12,6H19A2,2 0 0,1 21,8H21L4,8V18L6.14,10H23.21L20.93,18.5C20.7,19.37 19.92,20 19,20Z" /></svg>',
+                    action: () => window.handleAppAction(action, appName)
+                },
+                {
+                    label: 'Open in New Window',
+                    icon: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M19,4H5A2,2 0 0,0 3,6V18A2,2 0 0,0 5,20H19A2,2 0 0,0 21,18V6C22,4.89 21.1,4 20,4Z"/></svg>',
+                    action: () => window.handleAppAction(action, `${appName} (New)`)
+                },
+                { separator: true },
+                {
+                    label: 'Unpin from Dock',
+                    icon: '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M17.46,15.89L8.57,7H9.8L18.69,15.89M10,4H6V2H10M10,11H6V9H10M10,18H6V16H10M14,4H12V2H14M14,11H12V9H14M14,18H12V16H14M18,4H16V2H18M18,11H16V9H18M18,18H16V16H18V18Z" /></svg>',
+                    action: () => {
+                        icon.style.opacity = '0.5';
+                        icon.style.transform = 'scale(0.8)';
+                        
+                        setTimeout(() => {
+                            icon.style.opacity = '1';
+                            icon.style.transform = '';
+                        }, 1500);
+                    }
+                }
+            ]);
+        });
+    });
+
+    import('./file-uploader.js').then(module => {
+        const { FileUploader } = module;
+        window.fileUploader = new FileUploader();
+    });
 });
